@@ -24,10 +24,9 @@ class InReadDirectWebViewController: TeadsViewController, WKNavigationDelegate {
             let contentString = try? String(contentsOfFile: content) else {
                 return
         }
-        let contentStringWithIntegrationType = contentString.replacingOccurrences(of: "{INTEGRATION_TYPE}", with: "InRead Direct WebView Integration")
         webView.navigationDelegate = self
-        webView.loadHTMLString(contentStringWithIntegrationType, baseURL: Bundle.main.bundleURL)
-        
+        webView.load(URLRequest(url: URL(string: "https://www.ligaportal.at/initializr-liga/app-view-dummy.html")!))
+
         
         /// init helper
         webViewHelper = TeadsWebViewHelper(webView: webView, selector: "#teads-placement-slot", delegate: self)
