@@ -48,6 +48,7 @@ public final class GADMAdapterTeadsBannerAd: NSObject, MediationBannerAd {
 
         let adSize = adConfiguration.adSize
         bannerAd = TeadsInReadAdView(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: adSize.size.width, height: adSize.size.height)))
+        try? adSettings.registerAdView(bannerAd!, delegate: bannerAd!)
 
         placement = Teads.createInReadPlacement(pid: pid, settings: adSettings.adPlacementSettings, delegate: self)
         placement?.requestAd(requestSettings: adSettings.adRequestSettings)
@@ -57,10 +58,9 @@ public final class GADMAdapterTeadsBannerAd: NSObject, MediationBannerAd {
 extension GADMAdapterTeadsBannerAd: TeadsInReadAdPlacementDelegate {
     public func didReceiveAd(ad: TeadsInReadAd, adRatio: TeadsAdRatio) {
         ad.delegate = self
+        bannerAd?.adRatio = adRatio
         bannerAd?.bind(ad)
-        if adSettings?.hasSubscribedToAdResizing ?? false {
-            bannerAd?.updateHeight(with: adRatio)
-        }
+        bannerAd?.updateHeight()
         delegate = completionHandler?(self, nil)
         completionHandler = nil
     }
@@ -75,9 +75,8 @@ extension GADMAdapterTeadsBannerAd: TeadsInReadAdPlacementDelegate {
     }
 
     public func didUpdateRatio(ad _: TeadsInReadAd, adRatio: TeadsAdRatio) {
-        if adSettings?.hasSubscribedToAdResizing ?? false {
-            bannerAd?.updateHeight(with: adRatio)
-        }
+        bannerAd?.adRatio = adRatio
+        bannerAd?.updateHeight()
     }
 }
 
@@ -106,4 +105,18 @@ extension GADMAdapterTeadsBannerAd: TeadsAdDelegate {
     public func didCollapsedFromFullscreen(ad _: TeadsAd) {
         delegate?.didDismissFullScreenView()
     }
+}
+
+fileprivate var adRatioContext: UInt8 = 0
+
+extension TeadsInReadAdView: TeadsMediatedAdViewDelegate {
+  @objc
+  public var adRatio: TeadsAdRatio? {
+    get { objc_getAssociatedObject(self, &adRatioContext) as? TeadsAdRatio }
+    set { objc_setAssociatedObject(self, &adRatioContext, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+  }
+
+  public func didUpdateRatio(_ adView: UIView, adRatio: TeadsAdRatio) {
+    self.adRatio = adRatio
+  }
 }
