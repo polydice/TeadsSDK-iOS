@@ -22,6 +22,6 @@ Pod::Spec.new do |s|
     s.dependency                'TeadsSDK', s.version.to_s
     s.dependency                'Google-Mobile-Ads-SDK', '>= 12.2.0'
 
-    s.pod_target_xcconfig       = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
-    s.user_target_xcconfig      = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
+    s.pod_target_xcconfig       = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
+    s.user_target_xcconfig      = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
 end
