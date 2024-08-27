@@ -8,7 +8,15 @@
 import TeadsSDK
 import UIKit
 
+fileprivate var adRatioContext: UInt8 = 0
+
 public extension TeadsInReadAdView {
+    @objc
+    public var adRatio: TeadsAdRatio? {
+        get { objc_getAssociatedObject(self, &adRatioContext) as? TeadsAdRatio }
+        set { objc_setAssociatedObject(self, &adRatioContext, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+    }
+
     public func updateHeight() {
         guard
           window != nil,
