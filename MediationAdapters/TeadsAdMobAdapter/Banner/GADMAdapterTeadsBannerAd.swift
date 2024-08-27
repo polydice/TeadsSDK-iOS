@@ -107,15 +107,7 @@ extension GADMAdapterTeadsBannerAd: TeadsAdDelegate {
     }
 }
 
-fileprivate var adRatioContext: UInt8 = 0
-
 extension TeadsInReadAdView: TeadsMediatedAdViewDelegate {
-  @objc
-  public var adRatio: TeadsAdRatio? {
-    get { objc_getAssociatedObject(self, &adRatioContext) as? TeadsAdRatio }
-    set { objc_setAssociatedObject(self, &adRatioContext, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
-  }
-
   public func didUpdateRatio(_ adView: UIView, adRatio: TeadsAdRatio) {
     self.adRatio = adRatio
   }
