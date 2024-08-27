@@ -16,7 +16,7 @@ let commonModuleNamePath = "Common"
 let package = Package(
     name: "Teads",
     platforms: [
-        .iOS(.v12),
+        .iOS(.v13),
     ],
     products: [
         .library(
